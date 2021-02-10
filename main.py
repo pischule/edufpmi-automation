@@ -67,15 +67,21 @@ class EdufpmiClient:
         return all_forms
 
     def post_attendance(self, session_id, session_key):
+        page_url = f'{EdufpmiClient.ATTENDANCE_URL}?sessid={session_id}&sesskey={session_key}'
+        
+        form_page = self.session.get(page_url)
+        pattern = r'<input.+?form-check-input.+?value="(.+?)".*?>'
+        radiobutton = re.findall(pattern, form_page, re.DOTALL)[0]
+        
         form_data = {'sessid': session_id,
                      'sesskey': session_key,
                      '_qf__mod_attendance_student_attendance_form': 1,
                      'mform_isexpanded_id_session': 1,
-                     'status': 200,
+                     'status': radiobutton,
                      'submitbutton': 'Save changes'}
 
         headers = {
-            'referer': f'{EdufpmiClient.ATTENDANCE_URL}?sessid={session_id}&sesskey={session_key}'
+            'referer': page_url
         }
 
         response = self.session.post(EdufpmiClient.ATTENDANCE_URL, data=form_data, headers=headers)
