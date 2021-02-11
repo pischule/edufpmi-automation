@@ -1,6 +1,10 @@
 import requests
 import re
 import time
+import argparse
+import logging
+
+logging.basicConfig(format=logging.BASIC_FORMAT, level=logging.INFO)
 
 
 class EdufpmiClient:
@@ -23,30 +27,22 @@ class EdufpmiClient:
 
         self.session = requests.session()
 
-        # try:
         page = self.session.get(EdufpmiClient.LOGIN_URL).text
         token = re.search('logintoken".*value.*"(.*)"', page).group(1)
         request_data['logintoken'] = token
 
-        print(f'login: username={self.username}, password={self.password}')
-        print(f'token: {token}')
+        logging.info(f'logging in with : username={self.username}, password={self.password}, csrf token: {token}')
 
         response = self.session.post(EdufpmiClient.LOGIN_URL, request_data)
 
-        if response.status_code == 200:
-            print('successful login')
-        else:
-            raise RuntimeError('error while login: non 200 code')
-
-        # except Exception:
-        #     raise RuntimeError('login error: check your username/password')
+        if 'loginerrors' in response.text:
+            raise RuntimeError('Cannot log in. Please re-check your username and password')
 
     def get_attendance_urls(self):
-        # try:
         page = self.session.get(EdufpmiClient.ALL_DAY_ATTENDANCE_URL).text
         pattern = r'<a href="(https:\/\/edufpmi\.bsu\.by\/mod\/attendance\/view\.php\?id=\d+)" class="card-link">.*<\/a>'
         attendance_urls = re.findall(pattern, page)
-        print('successful get_attendance_urls:', attendance_urls)
+        logging.info(f'successful get_attendance_urls: {attendance_urls}')
         return attendance_urls
 
         # except Exception:
@@ -54,16 +50,16 @@ class EdufpmiClient:
 
     def get_attendance_form_data(self, attendance_page_url):
         page = self.session.get(attendance_page_url).text
-
-        pattern = r'<td class="statuscol cell c2 lastcol" style="text-align:center;width:\*;" colspan="3"><a href="https:\/\/edufpmi\.bsu\.by\/mod\/attendance\/attendance\.php\?sessid=(\d+)&amp;sesskey=(.+)">Submit attendance<\/a><\/td>'
-
+        pattern = r'<td class="statuscol cell c2 lastcol" style="text-align:center;width:\*;" colspan="3">' \
+                  r'<a href="https:\/\/edufpmi\.bsu\.by\/mod\/attendance\/attendance\.php\?' \
+                  r'sessid=(\d+)&amp;sesskey=(.+)">Submit attendance<\/a><\/td>'
         return re.findall(pattern, page)
 
     def get_all_attendance_form_data(self):
         all_forms = list()
         for url in self.get_attendance_urls():
             all_forms += self.get_attendance_form_data(url)
-        print('all forms data:', all_forms)
+        logging.info(f'all forms data: {all_forms}')
         return all_forms
 
     def post_attendance(self, session_id, session_key):
@@ -74,7 +70,7 @@ class EdufpmiClient:
         pattern = r'<input.+?form-check-input.+?value="(.+?)".*?>'
         radiobutton = re.findall(pattern, form_page, re.DOTALL)[0]
 
-        print('radiobutton:', radiobutton)
+        logging.info('radiobutton:', radiobutton)
 
         form_data = {'sessid': session_id,
                      'sesskey': session_key,
@@ -85,7 +81,7 @@ class EdufpmiClient:
 
         response = self.session.post(
             EdufpmiClient.ATTENDANCE_URL, data=form_data)
-        print(f'check_attendance: code={response.status_code}')
+        logging.info(f'check_attendance: code={response.status_code}')
 
     def check_all_attendance(self):
         all_form_data = self.get_all_attendance_form_data()
@@ -106,7 +102,7 @@ class EdufpmiAutomator:
                 self.client.login()
                 self.client.check_all_attendance()
             except Exception as e:
-                print(e)
+                logging.warning(e)
             time.sleep(self.sleep)
 
 
@@ -129,8 +125,14 @@ banner = (
 
 
 def main():
+    parser = argparse.ArgumentParser(description='Automate checking attendance')
+    parser.add_argument('username')
+    parser.add_argument('password')
+
+    args = parser.parse_args()
+
     print(banner)
-    ea = EdufpmiAutomator(username='', password='')
+    ea = EdufpmiAutomator(args.username, args.password)
     ea.start()
 
 
