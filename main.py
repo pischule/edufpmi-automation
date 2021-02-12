@@ -7,6 +7,11 @@ import logging
 log_format = '%(asctime)s %(filename)s: %(message)s'
 logging.basicConfig(format=log_format, datefmt='%Y-%m-%d %H:%M:%S', level=logging.INFO)
 
+parser = argparse.ArgumentParser(description='Automate checking attendance')
+parser.add_argument('username')
+parser.add_argument('password')
+args = parser.parse_args()
+
 
 class EdufpmiClient:
     LOGIN_URL = 'https://edufpmi.bsu.by/login/index.php'
@@ -99,7 +104,7 @@ class EdufpmiAutomator:
 
         while True:
             try:
-                print('---------------')
+                print('-'*40)
                 self.client.login()
                 self.client.check_all_attendance()
             except Exception as e:
@@ -107,13 +112,23 @@ class EdufpmiAutomator:
             time.sleep(self.sleep)
 
 
+banner = '''
+           _        __                 _                 
+          | |      / _|               (_)                
+   ___  __| |_   _| |_ _ __  _ __ ___  _                 
+  / _ \/ _` | | | |  _| '_ \| '_ ` _ \| |                
+ |  __/ (_| | |_| | | | |_) | | | | | | |                
+  \___|\__,_|\__,_|_| | .__/|_| |_| |_|_|  _             
+             | |      | |             | | (_)            
+   __ _ _   _| |_ ___ |_|__ ___   __ _| |_ _  ___  _ __  
+  / _` | | | | __/ _ \| '_ ` _ \ / _` | __| |/ _ \| '_ \ 
+ | (_| | |_| | || (_) | | | | | | (_| | |_| | (_) | | | |
+  \__,_|\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___/|_| |_|
+'''
+
+
 def main():
-    parser = argparse.ArgumentParser(description='Automate checking attendance')
-    parser.add_argument('username')
-    parser.add_argument('password')
-
-    args = parser.parse_args()
-
+    print(banner)
     ea = EdufpmiAutomator(args.username, args.password)
     ea.start()
 
