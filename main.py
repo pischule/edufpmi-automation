@@ -4,7 +4,8 @@ import time
 import argparse
 import logging
 
-logging.basicConfig(format=logging.BASIC_FORMAT, level=logging.INFO)
+log_format = '%(asctime)s %(filename)s: %(message)s'
+logging.basicConfig(format=log_format, datefmt='%Y-%m-%d %H:%M:%S', level=logging.INFO)
 
 
 class EdufpmiClient:
@@ -70,7 +71,7 @@ class EdufpmiClient:
         pattern = r'<input.+?form-check-input.+?value="(.+?)".*?>'
         radiobutton = re.findall(pattern, form_page, re.DOTALL)[0]
 
-        logging.info('radiobutton:', radiobutton)
+        logging.info(f'radiobutton: {radiobutton}')
 
         form_data = {'sessid': session_id,
                      'sesskey': session_key,
@@ -102,26 +103,8 @@ class EdufpmiAutomator:
                 self.client.login()
                 self.client.check_all_attendance()
             except Exception as e:
-                logging.warning(e)
+                logging.error(e, exc_info=True)
             time.sleep(self.sleep)
-
-
-banner = (
-    '''
-███████╗██████╗ ██╗   ██╗███████╗██████╗ ███╗   ███╗██╗                              
-██╔════╝██╔══██╗██║   ██║██╔════╝██╔══██╗████╗ ████║██║                              
-█████╗  ██║  ██║██║   ██║█████╗  ██████╔╝██╔████╔██║██║                              
-██╔══╝  ██║  ██║██║   ██║██╔══╝  ██╔═══╝ ██║╚██╔╝██║██║                              
-███████╗██████╔╝╚██████╔╝██║     ██║     ██║ ╚═╝ ██║██║                              
-╚══════╝╚═════╝  ╚═════╝ ╚═╝     ╚═╝     ╚═╝     ╚═╝╚═╝                              
-                                                                                     
- █████╗ ██╗   ██╗████████╗ ██████╗ ███╗   ███╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
-██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗████╗ ████║██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║
-███████║██║   ██║   ██║   ██║   ██║██╔████╔██║███████║   ██║   ██║██║   ██║██╔██╗ ██║
-██╔══██║██║   ██║   ██║   ██║   ██║██║╚██╔╝██║██╔══██║   ██║   ██║██║   ██║██║╚██╗██║
-██║  ██║╚██████╔╝   ██║   ╚██████╔╝██║ ╚═╝ ██║██║  ██║   ██║   ██║╚██████╔╝██║ ╚████║
-╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══
-    ''')
 
 
 def main():
@@ -131,7 +114,6 @@ def main():
 
     args = parser.parse_args()
 
-    print(banner)
     ea = EdufpmiAutomator(args.username, args.password)
     ea.start()
 
