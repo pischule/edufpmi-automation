@@ -3,9 +3,10 @@ import re
 import time
 import argparse
 import logging
+import sys
 
 log_format = '%(asctime)s %(filename)s: %(message)s'
-logging.basicConfig(format=log_format, datefmt='%Y-%m-%d %H:%M:%S', level=logging.INFO)
+logging.basicConfig(format=log_format, datefmt='%Y-%m-%d %H:%M:%S', stream=sys.stdout, level=logging.INFO)
 
 parser = argparse.ArgumentParser(description='Automate checking attendance')
 parser.add_argument('username')
@@ -104,7 +105,7 @@ class EdufpmiAutomator:
 
         while True:
             try:
-                print('-'*40)
+                print('-' * 40)
                 self.client.login()
                 self.client.check_all_attendance()
             except Exception as e:
