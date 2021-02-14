@@ -1,0 +1,23 @@
+{
+  "name": "EduFPMI Automation",
+  "description": "Отмечает твое присутвие во всех доступных ведомостях",
+  "keywords": ["edufpmi", "edufpmi.bsu.by", "attendance"],
+  "repository": "https://github.com/pischule/edufpmi-automation.git",
+  "env": {
+    "EDU_USERNAME": {
+      "description": "Your username at edufpmi.bsu.by",
+      "value": "fpm.****"
+    },
+    "EDU_PASSWORD": {
+      "description": "Your password at edufpmi.bsu.by",
+      "value": "*******"
+    }
+  },
+  "image": "heroku/python",
+  "formation": {
+    "clock": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}
