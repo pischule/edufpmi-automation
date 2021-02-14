@@ -4,6 +4,7 @@ import time
 import argparse
 import logging
 import sys
+from datetime import datetime
 
 log_format = '%(asctime)s %(filename)s: %(message)s'
 logging.basicConfig(format=log_format, datefmt='%Y-%m-%d %H:%M:%S', stream=sys.stdout, level=logging.INFO)
@@ -104,8 +105,12 @@ class EdufpmiAutomator:
     def start(self):
 
         while True:
+            now = datetime.now()
+            if now.weekday() == 6 or now.hour < 8 or now.hour > 21:
+                logging.info('time restriction')
+                time.sleep(self.sleep)
+                continue
             try:
-                print('-' * 40)
                 self.client.login()
                 self.client.check_all_attendance()
             except Exception as e:
