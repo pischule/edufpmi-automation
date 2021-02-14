@@ -1,6 +1,6 @@
 {
   "name": "EduFPMI Automation",
-  "description": "Отмечает твое присутвие во всех доступных ведомостях",
+  "description": "Checks edufpmi.bsu.by attendance report for you",
   "keywords": ["edufpmi", "edufpmi.bsu.by", "attendance"],
   "repository": "https://github.com/pischule/edufpmi-automation.git",
   "env": {
@@ -13,7 +13,6 @@
       "value": "*******"
     }
   },
-  "image": "heroku/python",
   "formation": {
     "clock": {
       "quantity": 1,
