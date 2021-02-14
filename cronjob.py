@@ -20,6 +20,6 @@ def run():
 
 
 scheduler = BlockingScheduler()
-scheduler.add_job(run, "interval", seconds=20)
+scheduler.add_job(run, "interval", minutes=20)
 
 scheduler.start()
