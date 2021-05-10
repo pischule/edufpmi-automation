@@ -1,10 +1,14 @@
 # edufpmi-automation
 
-## how to run this app
+## What is it for?
+
+Are you tired of marking your attendance at edufpmi.bsu.by? Let this bot do it for you.
+
+## How to run this app
 
 ### Heroku
 
-Just click the button below
+The easiest way. Just click the button below
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
