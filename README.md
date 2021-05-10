@@ -2,7 +2,7 @@
 
 ## What is it for?
 
-Are you tired of marking your attendance at edufpmi.bsu.by? Let this bot do it for you.
+Are you tired of marking your attendance at [edufpmi.bsu.by](https://edufpmi.bsu.by/)? Let this bot do it for you.
 
 ## How to run this app
 
