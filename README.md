@@ -1,8 +1,8 @@
 # edufpmi-automation
 
-## What is it for?
+## Что это
 
-Are you tired of marking your attendance at [edufpmi.bsu.by](https://edufpmi.bsu.by/)? Let this bot do it for you.
+Этот скрипт автоматизирует проставление посещаемости в ведомостях edufpmi.bsu.by. Благодаря ему у меня ни одного пропуска за прошлый семестр
 
 ## How to run this app
 
