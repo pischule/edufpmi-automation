@@ -1,20 +1,16 @@
 # edufpmi-automation
 
-## Что это
+## Что это 🤔?
 
-Этот скрипт автоматизирует проставление посещаемости в ведомостях edufpmi.bsu.by. Благодаря ему у меня ни одного пропуска за прошлый семестр
+Cкрипт автоматизирует проставление посещаемости в ведомостях edufpmi.bsu.by.
 
-## How to run this app
+## Как запустить
 
 ### Heroku
 
-The easiest way. Just click the button below
-
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-### Locally
-
-Make sure you are using python 3.6 and above
+### Локально
 
 ```shell
 git clone https://github.com/pischule/edufpmi-automation.git
