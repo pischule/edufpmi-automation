@@ -18,7 +18,3 @@ cd edufpmi-automation
 pip install -r requirements.txt
 python main.py your-username your-password
 ```
-
----
-
-Feel free to create pull request with improvement / bug fix.
